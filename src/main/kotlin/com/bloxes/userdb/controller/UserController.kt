@@ -5,14 +5,7 @@ import com.bloxes.userdb.model.UpdateUserRequest
 import com.bloxes.userdb.model.UserResponse
 import com.bloxes.userdb.model.WebResponse
 import com.bloxes.userdb.service.UserService
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping(value = ["/api/v1/user"])
@@ -32,10 +25,10 @@ class UserController(val userService: UserService) {
     }
 
     @GetMapping(
-        value = ["/{userId}"],
+        value = [""],
         produces = ["application/json"],
     )
-    fun getUser(@PathVariable("userId") id: String): WebResponse<UserResponse> {
+    fun getUser(@RequestParam("userId") id: String): WebResponse<UserResponse> {
         val user = userService.getUser(id)
         return WebResponse(
             status = "OK",
@@ -45,10 +38,10 @@ class UserController(val userService: UserService) {
     }
 
     @PutMapping(
-        value = ["/{userId}"],
+        value = [""],
         consumes = ["application/json"]
     )
-    fun updateUser(@PathVariable("userId") id: String, @RequestBody updateUserRequest: UpdateUserRequest): WebResponse<String> {
+    fun updateUser(@RequestParam("userId") id: String, @RequestBody updateUserRequest: UpdateUserRequest): WebResponse<String> {
         userService.updateUser(updateUserRequest, id)
         return WebResponse(
             status = "OK",
@@ -58,9 +51,9 @@ class UserController(val userService: UserService) {
     }
 
     @DeleteMapping(
-        value = ["/{userId}"],
+        value = [""],
     )
-    fun deleteUser(@PathVariable("userId") id: String): WebResponse<String> {
+    fun deleteUser(@RequestParam("userId") id: String): WebResponse<String> {
         userService.deleteUser(id)
         return WebResponse(
             status = "OK",

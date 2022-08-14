@@ -15,6 +15,8 @@ data class User (
         var end_of_subscription: String?,
         val init_folder: String,
         var recycle_bin: MutableList<String>,
+        var pinned: MutableList<String>,
+        var recent: MutableList<String>,
         val created_at: Date,
         var updated_at: Date
         )

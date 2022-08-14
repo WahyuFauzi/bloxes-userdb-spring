@@ -3,9 +3,11 @@ package com.bloxes.userdb.model
 import java.util.*
 
 data class UpdateUserRequest (
-    var password: String,
-    var user_name: String,
-    var subscribed_space: Number,
-    var used_space: Number,
-    var recycle_bin: MutableList<String>,
+    val password: String,
+    val user_name: String,
+    val subscribed_space: Number,
+    val used_space: Number,
+    val recycle_bin: MutableList<String>,
+    val pinned: MutableList<String>,
+    val recent: MutableList<String>
 )

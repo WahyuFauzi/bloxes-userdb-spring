@@ -6,11 +6,11 @@ import com.bloxes.userdb.model.UserResponse
 
 interface UserService {
 
-    fun createUser(createUserRequest: CreateUserRequest)
+    fun createUser(createUserRequest: CreateUserRequest): UserResponse
 
     fun getUser(userId: String): UserResponse
 
-    fun updateUser(updateUserRequest: UpdateUserRequest, userId: String)
+    fun updateUser(updateUserRequest: UpdateUserRequest, userId: String): UserResponse
 
     fun deleteUser(userId: String)
 }

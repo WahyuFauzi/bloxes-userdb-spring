@@ -12,7 +12,7 @@ import java.util.*
 
 @Service
 class UserServiceImpl(val userRepository: UserRepository, val helper: Helper): UserService {
-    override fun createUser(createUserRequest: CreateUserRequest) {
+    override fun createUser(createUserRequest: CreateUserRequest): UserResponse {
         val entity = User(
             id = UUID.randomUUID().toString(),
             email = createUserRequest.email,
@@ -24,11 +24,15 @@ class UserServiceImpl(val userRepository: UserRepository, val helper: Helper): U
             end_of_subscription = null,
             init_folder = "init_folder",
             recycle_bin = mutableListOf(),
+            pinned = mutableListOf(),
+            recent = mutableListOf(),
             created_at = Date(),
             updated_at = Date()
         )
 
         userRepository.save(entity)
+
+        return helper.entityToResponse(entity)
     }
 
     override fun getUser(userId: String): UserResponse {
@@ -36,7 +40,7 @@ class UserServiceImpl(val userRepository: UserRepository, val helper: Helper): U
         return helper.entityToResponse(entity!!)
     }
 
-    override fun updateUser(updateUserRequest: UpdateUserRequest, userId: String) {
+    override fun updateUser(updateUserRequest: UpdateUserRequest, userId: String): UserResponse {
         val entity = userRepository.findById(userId).get()
 
         entity.apply {
@@ -45,9 +49,13 @@ class UserServiceImpl(val userRepository: UserRepository, val helper: Helper): U
             subscribed_space = updateUserRequest.subscribed_space
             used_space = updateUserRequest.used_space
             recycle_bin = updateUserRequest.recycle_bin
+            pinned = updateUserRequest.pinned
+            recent = updateUserRequest.recent
         }
 
         userRepository.save(entity)
+
+        return helper.entityToResponse(entity)
     }
 
     override fun deleteUser(userId: String) {
