@@ -2,11 +2,13 @@ package com.bloxes.userdb.helper
 
 import com.bloxes.userdb.entity.User
 import com.bloxes.userdb.model.UserResponse
+import com.bloxes.userdb.repository.UserRepository
+import org.springframework.data.crossstore.ChangeSetPersister
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-class Helper {
-
+class Helper() {
     fun entityToResponse(entity: User): UserResponse {
         return UserResponse(
             id = entity.id,
@@ -19,6 +21,7 @@ class Helper {
             end_of_subscription = entity.end_of_subscription,
             init_folder = entity.init_folder,
             recycle_bin = entity.recycle_bin,
+            pinned = entity.pinned,
             created_at = entity.created_at,
             updated_at = entity.updated_at
         )

@@ -15,12 +15,12 @@ class UserController(val userService: UserService) {
         value = [""],
         consumes = ["application/json"]
     )
-    fun createUser(@RequestBody createUserRequest: CreateUserRequest): WebResponse<String> {
-        userService.createUser(createUserRequest)
+    fun createUser(@RequestBody createUserRequest: CreateUserRequest): WebResponse<UserResponse> {
+        val user = userService.createUser(createUserRequest)
         return WebResponse(
             status = "OK",
             code = 200,
-            data = "User with user_name: ${createUserRequest.user_name} has been created"
+            data = user
         )
     }
 
@@ -41,12 +41,12 @@ class UserController(val userService: UserService) {
         value = [""],
         consumes = ["application/json"]
     )
-    fun updateUser(@RequestParam("userId") id: String, @RequestBody updateUserRequest: UpdateUserRequest): WebResponse<String> {
-        userService.updateUser(updateUserRequest, id)
+    fun updateUser(@RequestParam("userId") id: String, @RequestBody updateUserRequest: UpdateUserRequest): WebResponse<UserResponse> {
+        val user = userService.updateUser(id, updateUserRequest)
         return WebResponse(
             status = "OK",
             code = 200,
-            data = "User with user_name: ${updateUserRequest.user_name} has been updated"
+            data = user
         )
     }
 
@@ -58,7 +58,7 @@ class UserController(val userService: UserService) {
         return WebResponse(
             status = "OK",
             code = 200,
-            data = "User with id: $id has been deletedd"
+            data = "User with id: $id has been deleted"
         )
     }
 }

@@ -1,20 +1,28 @@
 package com.bloxes.userdb.service
 
 import com.bloxes.userdb.entity.User
+import com.bloxes.userdb.helper.DateHelper
 import com.bloxes.userdb.helper.Helper
+import com.bloxes.userdb.helper.RepositoryHelper
+import com.bloxes.userdb.helper.UUIDHelper
 import com.bloxes.userdb.model.CreateUserRequest
 import com.bloxes.userdb.model.UpdateUserRequest
 import com.bloxes.userdb.model.UserResponse
 import com.bloxes.userdb.repository.UserRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class UserServiceImpl(val userRepository: UserRepository, val helper: Helper): UserService {
+class UserServiceImpl(
+    val userRepository: UserRepository,
+    val uuidHelper: UUIDHelper,
+    val repoHelper: RepositoryHelper,
+    val dateHelper: DateHelper,
+    val helper: Helper
+) : UserService {
     override fun createUser(createUserRequest: CreateUserRequest): UserResponse {
         val entity = User(
-            id = UUID.randomUUID().toString(),
+            id = uuidHelper.getRandomUUID(),
             email = createUserRequest.email,
             password = createUserRequest.password,
             user_name = createUserRequest.user_name,
@@ -22,12 +30,12 @@ class UserServiceImpl(val userRepository: UserRepository, val helper: Helper): U
             used_space = 0,
             subscribed_at = null,
             end_of_subscription = null,
-            init_folder = "init_folder",
+            init_folder = "init_folder", // TODO change this after production
             recycle_bin = mutableListOf(),
             pinned = mutableListOf(),
             recent = mutableListOf(),
-            created_at = Date(),
-            updated_at = Date()
+            created_at = dateHelper.getCurrentDateInString(),
+            updated_at = dateHelper.getCurrentDateInString()
         )
 
         userRepository.save(entity)
@@ -36,12 +44,13 @@ class UserServiceImpl(val userRepository: UserRepository, val helper: Helper): U
     }
 
     override fun getUser(userId: String): UserResponse {
-        val entity = userRepository.findByIdOrNull(userId)
-        return helper.entityToResponse(entity!!)
+        val user = repoHelper.findProductByIdOrThrowNotFound(userId)
+        println("founded user is $user")
+        return helper.entityToResponse(user);
     }
 
-    override fun updateUser(updateUserRequest: UpdateUserRequest, userId: String): UserResponse {
-        val entity = userRepository.findById(userId).get()
+    override fun updateUser(userId: String, updateUserRequest: UpdateUserRequest): UserResponse {
+        val entity = repoHelper.findProductByIdOrThrowNotFound(userId)
 
         entity.apply {
             password = updateUserRequest.password
@@ -51,6 +60,7 @@ class UserServiceImpl(val userRepository: UserRepository, val helper: Helper): U
             recycle_bin = updateUserRequest.recycle_bin
             pinned = updateUserRequest.pinned
             recent = updateUserRequest.recent
+            updated_at = dateHelper.getCurrentDateInString()
         }
 
         userRepository.save(entity)

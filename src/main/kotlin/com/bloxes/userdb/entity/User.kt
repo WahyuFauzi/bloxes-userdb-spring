@@ -17,6 +17,6 @@ data class User (
         var recycle_bin: MutableList<String>,
         var pinned: MutableList<String>,
         var recent: MutableList<String>,
-        val created_at: Date,
-        var updated_at: Date
+        val created_at: String,
+        var updated_at: String
         )

@@ -13,6 +13,7 @@ data class UserResponse (
     val end_of_subscription: String?,
     val init_folder: String,
     val recycle_bin: MutableList<String>,
-    val created_at: Date,
-    val updated_at: Date
+    val pinned: MutableList<String>,
+    val created_at: String,
+    val updated_at: String
 )

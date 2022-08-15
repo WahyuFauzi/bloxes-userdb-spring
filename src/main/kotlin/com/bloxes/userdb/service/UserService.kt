@@ -10,7 +10,7 @@ interface UserService {
 
     fun getUser(userId: String): UserResponse
 
-    fun updateUser(updateUserRequest: UpdateUserRequest, userId: String): UserResponse
+    fun updateUser(userId: String, updateUserRequest: UpdateUserRequest): UserResponse
 
     fun deleteUser(userId: String)
 }
